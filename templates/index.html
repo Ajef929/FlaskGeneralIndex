@@ -51,7 +51,7 @@
         <h1 class="search-title">General Index</h1>
     </div>
     <form action="/search" method="POST">
-        <div class="searchbar", align="center">
+        <div class="selection", align="center">
             <label>Search within</label>
             <select name="type">
                 <option value ="title">Title</option>
@@ -96,8 +96,14 @@
                   }
                   chooseYear2();
                   </script>
-
-
+            <input
+                  type="checkbox"
+                  id="export"
+                  name="export_check"
+                  value="yes" />
+            <label for="export">export results as CSV</label>
+        </div>
+        <div class="searchbar", align="center">
             <input name="query" type="text submit" placeholder="Search the paper" class="bar" required>
         </div>
     </form>

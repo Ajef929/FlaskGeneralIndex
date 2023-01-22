@@ -13,7 +13,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
 </head>
 <style>
     .searchbar{
@@ -26,6 +27,7 @@
         border-radius: 40px;
         box-shadow: 2px 3px 0px -2px #ccc;
         padding:10px;
+		 padding:10px;
         border:0px;
         outline: none;
         border-top: 1px solid #ccc;
@@ -53,10 +55,10 @@
             <div class="searchbar">
                 <input name="query" type="text submit" placeholder="Search the paper" class="bar" value="{{query}}" required>
             </div>
-    <hr>
+    
     <div class="results">
+        <img src="{{ year_plot }}" alt="Year Plot">
         {%print info%}
-        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
         <script>
             $(document).ready( function () {
             $('#res').DataTable();
@@ -66,28 +68,26 @@
             <thead>
             <tr>
                 <th>dkey</th>
-                <th>doi</th>
                 <th>title</th>
+                <th>doi</th>
                 <th>author</th>
-                <th>pub_date</th>
+                <th>year</th>
             </tr>
             </thead>
             <tbody>
-            {%for key, value in results.items()%}
+              {%for ind in results.index%}
                 <tr>
-                    <td>{{ key }}</td>
-                    <td>{{ value[0] }}</td>
-                    <td>{{ value[1] }}</td>
-                    <td>{{ value[2] }}</td>
-                    <td>{{ value[3] }}</td>
+                    <td>{{ results['dkey'][ind] }}</td>
+                    <td>{{ results['doi'][ind] }}</td>
+                    <td>{{ results['title'][ind] }}</td>
+                    <td>{{ results['author'][ind] }}</td>
+                    <td>{{ results['year'][ind] }}</td>
                 </tr>
             {% endfor %}
-            </tbody>
-            </table>
-
-
-    </div>
-    <br><br>
+	    </tbody>
+	    </table>
+	</div>
 
 </body>
 </html>
+
