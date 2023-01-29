@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 
 def search(query, search_within, start_year, end_year, export):
-    results = {'dkey':[], 'doi':[], 'title':[], 'author':[], 'year':[]}
+    results = {'dkey':[], 'doi':[], 'title':[], 'author':[], 'year':[],'journal':[]}
     if start_year != 'all_start_year' and end_year != 'all_end_year':
         if start_year > end_year:
             info = "end year must greater than start year"
@@ -21,13 +21,15 @@ def search(query, search_within, start_year, end_year, export):
     con = p.connect('postgresql://rccuser:password@localhost:5432/generalindex_metadata')
     cur = con.cursor()
     if search_within == 'title':
-        sql = "select dkey,doi,title,author,year from metadata_recent where title like '%{query}%' and year > '{start_year}' and year < '{end_year}' limit 10000".format(query=query, start_year=start_year, end_year=end_year)
+        sql = "select dkey,doi,title,author,year,journal from metadata_recent where title like '%{query}%' and year > '{start_year}' and year < '{end_year}' limit 10000".format(query=query, start_year=start_year, end_year=end_year)
     elif search_within == 'author':
-        sql = "select dkey,doi,title,author,year from metadata_recent where author like '%{query}%' and year > '{start_year}' and year < '{end_year}' limit 10000".format(query=query, start_year=start_year, end_year=end_year)
+        sql = "select dkey,doi,title,author,year,journal from metadata_recent where author like '%{query}%' and year > '{start_year}' and year < '{end_year}' limit 10000".format(query=query, start_year=start_year, end_year=end_year)
     elif search_within == 'doi':
-        sql = "select dkey,doi,title,author,year from metadata_recent where doi like '%{query}%' and year > '{start_year}' and year < '{end_year}' limit 10000".format(query=query, start_year=start_year, end_year=end_year)
+        sql = "select dkey,doi,title,author,year,journal from metadata_recent where doi like '%{query}%' and year > '{start_year}' and year < '{end_year}' limit 10000".format(query=query, start_year=start_year, end_year=end_year)
+    elif search_within == "journal":
+        sql = "select dkey,doi,title,author,year,journal from metadata_recent where journal like '%{query}%' and year > '{start_year}' and year < '{end_year}' limit 10000".format(query=query, start_year=start_year, end_year=end_year)
     else:
-        sql = "select dkey,doi,title,author,year from metadata_recent limit 1000;"
+        sql = "select dkey,doi,title,author,year,journal from metadata_recent limit 1000;"
     cur.execute(sql)
     data = cur.fetchall()
     for item in data:
@@ -36,6 +38,7 @@ def search(query, search_within, start_year, end_year, export):
         results['title'].append(item[1])
         results['author'].append(item[3])
         results['year'].append(item[4])
+        results['journal'].append(item[5])
     # use pandas dataframe to store results for later use, you can use the dataframe to create plot.
     metadata_df = pd.DataFrame(data=results)
     # if user ticks export as csv, the result will save in the same directory where they run the app.
@@ -50,7 +53,7 @@ def search(query, search_within, start_year, end_year, export):
     
     #plot settings
     fig, ax = plt.subplots()
-    ax = metadata_df['year'].value_counts(sort=False).plot(ax=ax, kind='bar')
+    ax = metadata_df.groupby('year').agg('count').plot(ax=ax, kind='bar',legend=False)
     ax.bar_label(ax.containers[0])
     ax.set_ylabel('Frequency')
     fig.suptitle("Frequency over time")
