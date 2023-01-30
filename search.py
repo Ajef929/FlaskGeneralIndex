@@ -20,15 +20,14 @@ def search(query, search_within, start_year, end_year, export):
         end_year = int(end_year) + 1
     con = p.connect('postgresql://rccuser:password@localhost:5432/generalindex_metadata')
     cur = con.cursor()
-    query = query.lower()
     if search_within == 'title':
-        sql = "select dkey,doi,title,author,year,journal from metadata_recent where LOWER(title) like '%{query}%' and year > '{start_year}' and year < '{end_year}' limit 10000".format(query=query, start_year=start_year, end_year=end_year)
+        sql = "select dkey,doi,title,author,year,journal from metadata_recent where title like '%{query}%' and year > '{start_year}' and year < '{end_year}' limit 10000".format(query=query, start_year=start_year, end_year=end_year)
     elif search_within == 'author':
-        sql = "select dkey,doi,title,author,year,journal from metadata_recent where LOWER(author) like '%{query}%' and year > '{start_year}' and year < '{end_year}' limit 10000".format(query=query, start_year=start_year, end_year=end_year)
+        sql = "select dkey,doi,title,author,year,journal from metadata_recent where author like '%{query}%' and year > '{start_year}' and year < '{end_year}' limit 10000".format(query=query, start_year=start_year, end_year=end_year)
     elif search_within == 'doi':
         sql = "select dkey,doi,title,author,year,journal from metadata_recent where doi like '%{query}%' and year > '{start_year}' and year < '{end_year}' limit 10000".format(query=query, start_year=start_year, end_year=end_year)
     elif search_within == "journal":
-        sql = "select dkey,doi,title,author,year,journal from metadata_recent where LOWER(journal) like '%{query}%' and year > '{start_year}' and year < '{end_year}' limit 10000".format(query=query, start_year=start_year, end_year=end_year)
+        sql = "select dkey,doi,title,author,year,journal from metadata_recent where journal like '%{query}%' and year > '{start_year}' and year < '{end_year}' limit 10000".format(query=query, start_year=start_year, end_year=end_year)
     else:
         sql = "select dkey,doi,title,author,year,journal from metadata_recent limit 1000;"
     cur.execute(sql)
@@ -57,20 +56,8 @@ def search(query, search_within, start_year, end_year, export):
     ax = metadata_df.groupby('year').agg('count').plot(ax=ax, kind='bar',legend=False)
     ax.bar_label(ax.containers[0])
     ax.set_ylabel('Frequency')
-    fig.suptitle("Frequency of Mentions over Time")
-    fig.savefig("static/IMG/year_plot1.png")
+    fig.suptitle("Frequency over time")
+    fig.savefig("static/IMG/year_plot.png")
     
-
-    #plot of proportions
-    fig, ax = plt.subplots()
-    ax = metadata_df['year'].value_counts(normalize=True).sort_values().plot(ax=ax,kind='bar',legend=False)
-    ax.bar_label(ax.containers[0])
-    ax.set_ylabel('Proportion')
-    fig.suptitle("Proportions of Search Term Mentions by Year")
-    fig.savefig("static/IMG/year_plot2.png")
-    
-
-
-
     info = ''
     return metadata_df, info
