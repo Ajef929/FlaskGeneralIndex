@@ -27,7 +27,7 @@ def search(query, search_within, start_year, end_year, export):
     if search_within == 'title':
         sql = "select dkey,doi,title,author,year,journal from metadata_recent where title_lwr like '%{query}%' and year > '{start_year}' and year < '{end_year}' limit 10000".format(query=query, start_year=start_year, end_year=end_year)
     elif search_within == 'author':
-        sql = "select dkey,doi,title,author,year,journal from metadata_recent where LOWER(author) like '%{query}%' and year > '{start_year}' and year < '{end_year}' limit 10000".format(query=query, start_year=start_year, end_year=end_year)
+        sql = "select dkey,doi,title,author,year,journal from metadata_recent where author_lwr like '%{query}%' and year > '{start_year}' and year < '{end_year}' limit 10000".format(query=query, start_year=start_year, end_year=end_year)
     elif search_within == 'doi':
         sql = "select dkey,doi,title,author,year,journal from metadata_recent where doi like '%{query}%' and year > '{start_year}' and year < '{end_year}' limit 10000".format(query=query, start_year=start_year, end_year=end_year)
     elif search_within == "journal":
@@ -47,7 +47,7 @@ def search(query, search_within, start_year, end_year, export):
         results['author'].append(item[3])
         results['year'].append(item[4])
         results['journal'].append(item[5])
-        if i < 100:
+        if i < 20:
             results['link'].append(pydoi.get_url(item[1]))
         else:
             results['link'].append('None')
