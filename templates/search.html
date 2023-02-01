@@ -72,18 +72,20 @@
                 <th>author</th>
                 <th>year</th>
 		<th>journal</th>
-                <th>link</th>
             </tr>
             </thead>
             <tbody>
               {%for ind in results.index%}
                 <tr>
+                    {% if results['link'][ind] == 'None' %}
                     <td>{{ results['title'][ind] }}</td>
+                    {% else %}
+                    <td><a href={{ results['link'][ind] }}>{{ results['title'][ind] }}</a></td>
+                    {% endif %} 
                     <td>{{ results['doi'][ind] }}</td>
                     <td>{{ results['author'][ind] }}</td>
                     <td>{{ results['year'][ind] }}</td>
 		    <td>{{ results['journal'][ind] }}</td>
-                    <td><a href={{ results['link'][ind] }}>{{ results['link'][ind] }}</a></td>
                 </tr>
             {% endfor %}
 	    </tbody>

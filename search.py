@@ -42,7 +42,7 @@ def search(query, search_within, start_year, end_year, export):
         results['author'].append(item[3])
         results['year'].append(item[4])
         results['journal'].append(item[5])
-        if i < 20:
+        if i < 40:
             results['link'].append(pydoi.get_url(item[1]))
         else:
             results['link'].append('None')
