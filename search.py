@@ -34,6 +34,7 @@ def search(query, search_within, start_year, end_year, export):
         sql = "select dkey,doi,title,author,year,journal from metadata_recent limit 1000;"
     cur.execute(sql)
     data = cur.fetchall()
+    i = 0
     for item in data:
         results['dkey'].append(item[0])
         results['doi'].append(item[1])
@@ -41,7 +42,11 @@ def search(query, search_within, start_year, end_year, export):
         results['author'].append(item[3])
         results['year'].append(item[4])
         results['journal'].append(item[5])
-        results['link'].append(pydoi.get_url(item[1]))
+        if i < 20:
+            results['link'].append(pydoi.get_url(item[1]))
+        else:
+            results['link'].append('None')
+        i += 1
     # use pandas dataframe to store results for later use, you can use the dataframe to create plot.
     metadata_df = pd.DataFrame(data=results)
     # if user ticks export as csv, the result will save in the same directory where they run the app.
