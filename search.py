@@ -8,7 +8,7 @@ import time
 
 def search(query, search_within, start_year, end_year, export):
     start_time = time.time()
-    results = {'dkey':[], 'doi':[], 'title':[], 'author':[], 'year':[],'journal':[], 'link':[]}
+    results = {'dkey':[], 'doi':[], 'title':[], 'author':[], 'year':[],'journal':[]}
     if start_year != 'all_start_year' and end_year != 'all_end_year':
         if start_year > end_year:
             info = "end year must greater than start year"
@@ -47,11 +47,6 @@ def search(query, search_within, start_year, end_year, export):
         results['author'].append(item[3])
         results['year'].append(item[4])
         results['journal'].append(item[5])
-        if i < 20:
-            results['link'].append(pydoi.get_url(item[1]))
-        else:
-            results['link'].append('None')
-        i += 1
     # use pandas dataframe to store results for later use, you can use the dataframe to create plot.
     end_time = time.time()
     print(end_time - start_time)

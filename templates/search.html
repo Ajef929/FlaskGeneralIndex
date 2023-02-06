@@ -77,11 +77,7 @@
             <tbody>
               {%for ind in results.index%}
                 <tr>
-                    {% if results['link'][ind] == 'None' %}
-                    <td>{{ results['title'][ind] }}</td>
-                    {% else %}
-                    <td><a href={{ results['link'][ind] }}>{{ results['title'][ind] }}</a></td>
-                    {% endif %} 
+                    <td><a href="{{ url_for('convert_doi', doi = results['doi'][ind]) }}">{{ results['title'][ind] }}</a></td>
                     <td>{{ results['doi'][ind] }}</td>
                     <td>{{ results['author'][ind] }}</td>
                     <td>{{ results['year'][ind] }}</td>
