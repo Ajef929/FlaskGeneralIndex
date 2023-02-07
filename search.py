@@ -33,7 +33,7 @@ def search(query, search_within, start_year, end_year, export):
     elif search_within == "journal":
         sql = "select dkey,doi,title,author,year,journal from metadata_recent where journal like '%{query}%' and year > '{start_year}' and year < '{end_year}' limit 10000".format(query=query, start_year=start_year, end_year=end_year)
     else:
-        sql = "select dkey,doi,title,author,year,journal from metadata_recent limit 1000;"
+        sql = "select dkey,doi,title,author,year,journal from metadata_recent limit 10000;"
     cur.execute(sql)
     data = cur.fetchall()
     i = 0
@@ -50,13 +50,7 @@ def search(query, search_within, start_year, end_year, export):
     # use pandas dataframe to store results for later use, you can use the dataframe to create plot.
     end_time = time.time()
     print(end_time - start_time)
-    metadata_df = pd.DataFrame(data=results)
-    # if user ticks export as csv, the result will save in the same directory where they run the app.
-    # Note that only one export can be saved at any one time
-    # filestamp
-    file_to_save = rf'./results_Datetime:{datetime.now()}_SearchTerm:{query}_YearBetween:{start_year}And{end_year}.csv'
-    if export == 'yes':
-        metadata_df.to_csv(file_to_save, sep='\t', encoding='utf-8', header=True, index=False)
+    metadata_df = pd.DataFrame(data=results) 
     
     cur.close()
     con.close()
