@@ -57,7 +57,7 @@ def search(query, search_within, start_year, end_year, export):
     
     #plot settings
     fig, ax = plt.subplots()
-    ax = metadata_df.groupby('year').agg('count').plot(ax=ax, kind='bar',legend=False)
+    metadata_df['year'].value_counts().sort_index().plot(ax=ax, kind='bar')
     ax.bar_label(ax.containers[0])
     ax.set_ylabel('Frequency')
     fig.suptitle("Frequency over time")
